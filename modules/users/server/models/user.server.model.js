@@ -86,31 +86,10 @@ var UserSchema = new Schema({
     type: String,
     trim: true
   },
-  // username: {
-  //   type: String,
-  //   unique: 'Username already exists',
-  //   required: 'Please fill in a username',
-  //   validate: [validateUsername, 'Please enter a valid username: 3+ characters long, non restricted word, characters "_-.", no consecutive dots, does not begin or end with dots, letters a-z and numbers 0-9.'],
-  //   lowercase: true,
-  //   trim: true
-  // },
-  // password: {
-  //   type: String,
-  //   default: ''
-  // },
-  // salt: {
-  //   type: String
-  // },
   profileImageURL: {
     type: String,
     default: 'modules/users/client/img/profile/default.png'
   },
-  // provider: {
-  //   type: String,
-  //   required: 'Provider is required'
-  // },
-  // providerData: {},
-  // additionalProvidersData: {},
   roles: {
     type: [{
       type: String,

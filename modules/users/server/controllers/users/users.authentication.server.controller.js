@@ -26,8 +26,14 @@ exports.signup = function (req, res) {
   // Init user and add missing fields
   var user = new User(req.body);
   var name = req.body.name.split(' ');
-  user.firstName = name[0];
-  user.lastName = name[1];
+  user.firstName = '';
+  user.lastName = '';
+  if (name.length === 1) {
+    user.firstName = name[0];
+  } else if (name.length === 2) {
+    user.firstName = name[0];
+    user.lastName = name[1];
+  }
   user.displayName = user.firstName + ' ' + user.lastName;
 
   // Then save the user
