@@ -34,13 +34,13 @@ module.exports = {
   },
   twitter: {
     username: '@TWITTER_USERNAME',
-    clientID: process.env.TWITTER_KEY || 'CONSUMER_KEY',
-    clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',
+    clientID: process.env.TWITTER_KEY || 'wboRZeDOguSF4aqpTxIrlCtjR',
+    clientSecret: process.env.TWITTER_SECRET || 'V6CbQpJ6Q2ChFT25MGwl6FIoHofwj6bEY4GiqG318t70aaNyBp',
     callbackURL: '/api/auth/twitter/callback'
   },
   google: {
-    clientID: process.env.GOOGLE_ID || 'APP_ID',
-    clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
+    clientID: process.env.GOOGLE_ID || '1020367184484-fgqdf45glf9foevjovjuag34gfhm25cn.apps.googleusercontent.com',
+    clientSecret: process.env.GOOGLE_SECRET || 'RzK5MJ-q3HLqy1-Hgp_NdiFj',
     callbackURL: '/api/auth/google/callback'
   },
   linkedin: {
