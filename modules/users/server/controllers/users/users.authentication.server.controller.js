@@ -7,7 +7,8 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
   passport = require('passport'),
-  User = mongoose.model('User');
+  User = mongoose.model('User'),
+  Passport = mongoose.model('Passport');
 
 // URLs for which user can't be redirected on signin
 var noReturnUrls = [
@@ -24,7 +25,9 @@ exports.signup = function (req, res) {
 
   // Init user and add missing fields
   var user = new User(req.body);
-  user.provider = 'local';
+  var name = req.body.name.split(' ');
+  user.firstName = name[0];
+  user.lastName = name[1];
   user.displayName = user.firstName + ' ' + user.lastName;
 
   // Then save the user
@@ -34,15 +37,24 @@ exports.signup = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      // Remove sensitive data before login
-      user.password = undefined;
-      user.salt = undefined;
+      var pass = new Passport();
+      pass.provider = 'local';
+      pass.password = req.body.password;
+      pass.userId = user;
 
-      req.login(user, function (err) {
+      pass.save(function (err) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(422).send({
+            message: errorHandler.getErrorMessage(err)
+          });
         } else {
-          res.json(user);
+          req.login(user, function(err) {
+            if (err) {
+              res.status(400).send(err);
+            } else {
+              res.json(user);
+            }
+          });
         }
       });
     }
@@ -179,6 +191,112 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
           });
         } else {
           return done(err, user, info);
+        }
+      }
+    });
+  } else {
+    // User is already logged in, join the provider data to the existing user
+    var user = req.user;
+
+    // Check if user exists, is not signed in using this provider, and doesn't have that provider data already configured
+    if (user.provider !== providerUserProfile.provider && (!user.additionalProvidersData || !user.additionalProvidersData[providerUserProfile.provider])) {
+      // Add the provider data to the additional provider data field
+      if (!user.additionalProvidersData) {
+        user.additionalProvidersData = {};
+      }
+
+      user.additionalProvidersData[providerUserProfile.provider] = providerUserProfile.providerData;
+
+      // Then tell mongoose that we've updated the additionalProvidersData field
+      user.markModified('additionalProvidersData');
+
+      // And save the user
+      user.save(function (err) {
+        return done(err, user, info);
+      });
+    } else {
+      return done(new Error('User is already connected using this provider'), user);
+    }
+  }
+};
+
+/**
+ * Helper function to save or update a OAuth user profile
+ */
+exports.saveOAuthUserProfileNew = function (req, providerUserProfile, done) {
+  // Setup info object
+  var info = {};
+
+  // Set redirection path on session.
+  // Do not redirect to a signin or signup page
+  if (noReturnUrls.indexOf(req.session.redirect_to) === -1)
+    info.redirect_to = req.session.redirect_to;
+
+  if (req.user === undefined || req.user === null) {
+    User.findOne({
+      email: providerUserProfile.email
+    }, function (err, user) {
+      if (err) {
+        return done(err);
+      } else {
+        if (!user) {
+          user = new User({
+            firstName: providerUserProfile.firstName,
+            lastName: providerUserProfile.lastName,
+            displayName: providerUserProfile.displayName,
+            profileImageURL: providerUserProfile.profileImageURL
+          });
+
+          user.email = providerUserProfile.email;
+
+          // And save the user
+          user.save(function (err) {
+            if (err) {
+              return done(err);
+            }
+
+            var pass = new Passport();
+            pass.provider = providerUserProfile.provider;
+            pass.userId = user;
+            pass.providerData = providerUserProfile.providerData;
+            pass.additionalProvidersData = providerUserProfile.additionalProvidersData;
+
+            pass.save(function (err) {
+              if (err) {
+                return done(err);
+              } else {
+                return done(err, user, info);
+              }
+            });
+          });
+        } else {
+          Passport.findOne({
+            userId: user,
+            provider: providerUserProfile.provider
+          }, function(err, pass) {
+            if (err) {
+              return done(err);
+            }
+
+            if (!pass) {
+              pass = new Passport();
+            }
+
+            pass.provider = providerUserProfile.provider;
+            pass.userId = user;
+            pass.providerData = providerUserProfile.providerData;
+            pass.additionalProvidersData = providerUserProfile.additionalProvidersData;
+
+            pass.save(function (err) {
+              if (err) {
+                return done(err);
+              } else {
+                user.provider = pass.provider;
+                user.additionalProvidersData = pass.additionalProvidersData;
+                return done(err, user, info);
+              }
+            });
+          });
         }
       }
     });

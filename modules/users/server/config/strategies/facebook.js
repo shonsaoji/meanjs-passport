@@ -28,7 +28,7 @@ module.exports = function (config) {
       lastName: profile.name.familyName,
       displayName: profile.displayName,
       email: profile.emails ? profile.emails[0].value : undefined,
-      username: profile.username || generateUsername(profile),
+      // username: profile.username || generateUsername(profile),
       profileImageURL: (profile.id) ? '//graph.facebook.com/' + profile.id + '/picture?type=large' : undefined,
       provider: 'facebook',
       providerIdentifierField: 'id',
@@ -36,7 +36,7 @@ module.exports = function (config) {
     };
 
     // Save the user OAuth profile
-    users.saveOAuthUserProfile(req, providerUserProfile, done);
+    users.saveOAuthUserProfileNew(req, providerUserProfile, done);
 
     function generateUsername(profile) {
       var username = '';
