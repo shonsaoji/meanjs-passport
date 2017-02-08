@@ -17,7 +17,7 @@ module.exports = function () {
   function (usernameOrEmail, password, done) {
     User.findOne({
       email: usernameOrEmail.toLowerCase()
-    }, function (err, user) {
+    }, '-__v -deletedAt -isDeleted -created', function (err, user) {
       if (err) {
         return done(err);
       }
@@ -32,7 +32,7 @@ module.exports = function () {
 
         if (!pass || !pass.authenticate(password)) {
           return done(null, false, {
-            message: 'Invalid username or password (' + (new Date()).toLocaleTimeString() + ')'
+            message: 'Invalid username or password'
           });
         }
 

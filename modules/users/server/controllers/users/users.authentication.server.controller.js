@@ -93,9 +93,13 @@ exports.signin = function (req, res, next) {
 /**
  * Signout
  */
-exports.signout = function (req, res) {
+exports.signout = function (req, res, next) {
   req.logout();
-  res.redirect('/');
+
+  req.session.destroy(function (err) {
+    if (err) { return next(err); }
+    res.status(200).send({ message: 'User logged out successfully' });
+  });
 };
 
 /**
