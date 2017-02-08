@@ -73,14 +73,14 @@
     "socket.io": "^1.4.8",
     "validator": "~6.0.0",
     "winston": "^2.2.0",
-    "wiredep": "~4.0.0",
-    "gulp": "~3.9.1"
+    "wiredep": "~4.0.0"
   },
   "devDependencies": {
     "coveralls": "~2.11.6",
     "del": "^2.2.2",
     "eslint": "~2.2.0",
     "eslint-config-airbnb": "~6.0.2",
+    "gulp": "~3.9.1",
     "gulp-angular-templatecache": "~2.0.0",
     "gulp-autoprefixer": "~3.1.0",
     "gulp-concat": "~2.6.0",
