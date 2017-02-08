@@ -28,19 +28,19 @@ module.exports = {
     title: defaultEnvConfig.app.title + ' - Development Environment'
   },
   facebook: {
-    clientID: process.env.FACEBOOK_ID || 'APP_ID',
-    clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
+    clientID: process.env.FACEBOOK_ID || '1727220234207671',
+    clientSecret: process.env.FACEBOOK_SECRET || '72726011b95b6432d70304bffe425fc4',
     callbackURL: '/api/auth/facebook/callback'
   },
   twitter: {
     username: '@TWITTER_USERNAME',
-    clientID: process.env.TWITTER_KEY || 'CONSUMER_KEY',
-    clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',
+    clientID: process.env.TWITTER_KEY || 'wboRZeDOguSF4aqpTxIrlCtjR',
+    clientSecret: process.env.TWITTER_SECRET || 'V6CbQpJ6Q2ChFT25MGwl6FIoHofwj6bEY4GiqG318t70aaNyBp',
     callbackURL: '/api/auth/twitter/callback'
   },
   google: {
-    clientID: process.env.GOOGLE_ID || 'APP_ID',
-    clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
+    clientID: process.env.GOOGLE_ID || '1020367184484-fgqdf45glf9foevjovjuag34gfhm25cn.apps.googleusercontent.com',
+    clientSecret: process.env.GOOGLE_SECRET || 'RzK5MJ-q3HLqy1-Hgp_NdiFj',
     callbackURL: '/api/auth/google/callback'
   },
   linkedin: {
@@ -49,8 +49,8 @@ module.exports = {
     callbackURL: '/api/auth/linkedin/callback'
   },
   github: {
-    clientID: process.env.GITHUB_ID || 'APP_ID',
-    clientSecret: process.env.GITHUB_SECRET || 'APP_SECRET',
+    clientID: process.env.GITHUB_ID || '694af9d8a96b8cf2b45f',
+    clientSecret: process.env.GITHUB_SECRET || '56331b46d8af02bfe56617d17dd9fd51b9ed4d49',
     callbackURL: '/api/auth/github/callback'
   },
   paypal: {
@@ -60,12 +60,12 @@ module.exports = {
     sandbox: true
   },
   mailer: {
-    from: process.env.MAILER_FROM || 'MAILER_FROM',
+    from: process.env.MAILER_FROM || 'patronous.test@gmail.com',
     options: {
-      service: process.env.MAILER_SERVICE_PROVIDER || 'MAILER_SERVICE_PROVIDER',
+      service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
       auth: {
-        user: process.env.MAILER_EMAIL_ID || 'MAILER_EMAIL_ID',
-        pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
+        user: process.env.MAILER_EMAIL_ID || 'patronous.test@gmail.com',
+        pass: process.env.MAILER_PASSWORD || 'Patronous@123'
       }
     }
   },
