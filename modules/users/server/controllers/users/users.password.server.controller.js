@@ -8,6 +8,7 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
+  Passport = mongoose.model('Passport'),
   nodemailer = require('nodemailer'),
   async = require('async'),
   crypto = require('crypto');
@@ -28,30 +29,43 @@ exports.forgot = function (req, res, next) {
     },
     // Lookup user by username
     function (token, done) {
-      if (req.body.username) {
+      if (req.body.email) {
         User.findOne({
-          username: req.body.username.toLowerCase()
+          email: req.body.email.toLowerCase()
         }, '-salt -password', function (err, user) {
           if (err || !user) {
             return res.status(400).send({
-              message: 'No account with that username has been found'
-            });
-          } else if (user.provider !== 'local') {
-            return res.status(400).send({
-              message: 'It seems like you signed up using your ' + user.provider + ' account'
+              message: 'No account with that email has been found'
             });
           } else {
-            user.resetPasswordToken = token;
-            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+            Passport.findOne({
+              provider: 'local',
+              userId: user
+            }, function(err, pass) {
+              if (err) {
+                return res.status(400).send({
+                  message: 'No account with that email has been found'
+                });
+              } else {
+                if (!pass) {
+                  return res.status(400).send({
+                    message: 'It seems like you signed up using your social account'
+                  });
+                } else {
+                  user.resetPasswordToken = token;
+                  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-            user.save(function (err) {
-              done(err, token, user);
+                  user.save(function (err) {
+                    done(err, token, user);
+                  });
+                }
+              }
             });
           }
         });
       } else {
         return res.status(422).send({
-          message: 'Username field must not be blank'
+          message: 'Email field must not be blank'
         });
       }
     },

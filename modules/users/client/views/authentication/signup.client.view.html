@@ -7,7 +7,7 @@
           <label for="name">Name</label>
           <input type="text" id="name" name="name" class="form-control" ng-model="vm.credentials.name" placeholder="Name" required autofocus>
           <div ng-messages="vm.userForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Your Name is required.</p>
+            <p class="help-block error-text" ng-message="required">Please enter your name</p>
           </div>
         </div>
         <div class="form-group" show-errors>
@@ -41,7 +41,7 @@
           <uib-progressbar value="requirementsProgress" type="{{requirementsColor}}"><span style="color:white; white-space:nowrap;">{{requirementsProgress}}%</span></uib-progressbar>
         </div>
         <div class="text-center form-group">
-          <button type="submit" class="btn btn-primary">Sign up</button>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
           &nbsp; or&nbsp;
           <a ui-sref="authentication.signin" class="show-signup">Sign in</a>
         </div>
